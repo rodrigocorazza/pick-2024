@@ -1,0 +1,13 @@
+#Imagem a ser usada
+FROM ubuntu:18.04
+
+#RUN precisa criar/executar algum comando quando a imagem do container está sendo criada/buildada, exemplo instalação nginx
+RUN apt-get update && apt-get install nginx -y 
+
+#EXPOSE vai expor uma porta do container
+EXPOSE 80
+
+#CMD vai ser executado assim que o container ja estiver pronto
+CMD ["nginx", "-g", "daemon off;"]
+
+#o parametro -g com o daemon off, representa que ele vai rodar em primeiro plano e não em background

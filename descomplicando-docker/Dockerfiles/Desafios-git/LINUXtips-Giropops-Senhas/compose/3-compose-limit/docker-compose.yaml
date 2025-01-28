@@ -1,0 +1,36 @@
+version: "3"
+services:
+  giropops-senhas:
+    build: ./
+    ports:
+      - "80:5000"
+    networks:
+      - giropops
+    environment:
+      REDIS_HOST: redis
+    volumes:
+      - strigus:/strigus
+    depends_on:                 #depends_on: depende do redis ficar pronto para subir o giropops subir também
+      - redis
+    deploy:                     #deploy: no momento de deploy
+      resources:                #resources: siga alguns parametros
+        reservations:           #reservations: está reservado pro container
+          cpus: '0.25'
+          memory: '128M'
+        limits:                 #limits: limite maximo que o container pode usar
+          cpus: '0.5'
+          memory: '256M'
+
+  redis:
+    image: redis
+    networks:
+      - giropops
+    volumes:
+      - strigus:/strigus
+
+networks:
+  giropops:
+    driver: bridge
+
+volumes:
+  strigus: 

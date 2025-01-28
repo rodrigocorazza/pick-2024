@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: locust-giropops
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: / #redireciona a requisição para a raiz
+
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: locust-giropops
+            port:
+              number: 8089

@@ -1,0 +1,15 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: giropops-senhas-static
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /static #quando bater no path ip-do-ingress/giropops-senhas, redireciona para o service giropops-senhas, dps pods
+        pathType: Prefix
+        backend:
+          service:
+            name: giropops-senhas
+            port:
+              number: 5000

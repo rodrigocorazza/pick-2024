@@ -1,0 +1,14 @@
+apiVersion: monitoring.coreos.com/v1 #Devido nao ser um projeto interno do kubernetes, e sim externo do Prometheus, a apiVersion é diferente
+kind: ServiceMonitor
+metadata:
+  name: nginx-servicemonitor
+  labels:
+    app: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  endpoints:          #Aqui é onde definimos o que será monitorado
+  - interval: 10s
+    path: /metrics
+    targetPort: 9113

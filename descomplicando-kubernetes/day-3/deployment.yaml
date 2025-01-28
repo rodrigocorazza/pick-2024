@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-deployment
+    fruta: banana
+  name: nginx-deployment
+  namespace: giropops
+spec:
+  replicas: 10                #replicas: Quantidade de réplicas
+  revisionHistoryLimit: 10    #revisionHistoryLimit: Vai guarda as ultimas 10 revisões do comando "rollout history"
+  selector:                   #selector: O selector controla os pods do deployment
+    matchLabels:              #matchLabels: Analisa quais label os pods possuem para poder cuidar deles
+      app: nginx-deployment   #label do matchLabel
+  strategy:                   #strategy: Estratégias de deploy
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+#===================================terminou a configuração do deployment==================================
+#=Abaixo é a configuração do template para criação dos pods, do container que fazem parte desse dpeloyment=
+#==========================================================================================================
+
+  template:                   #template: Configurações dos pods, dos containers
+    metadata:
+      labels:
+        app: nginx-deployment
+    spec:
+      containers:
+      - image: nginx:1.14.0
+        name: nginx-vai
+        resources:
+          limits:
+            cpu: "0.9"
+            memory: 256Mi
+          requests:
+            cpu: "0.4"
+            memory: 64Mi

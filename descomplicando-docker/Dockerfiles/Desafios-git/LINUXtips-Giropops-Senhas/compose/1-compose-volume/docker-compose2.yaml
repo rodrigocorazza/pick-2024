@@ -1,0 +1,20 @@
+version: "3"
+services:
+  giropops-senhas:
+    image: giropops-senhas:1.0
+    ports:
+      - "80:5000"
+    networks:
+      - giropops
+    environment:
+      REDIS_HOST: redis
+  redis:
+    image: redis
+    ports: 
+      - "6379:6379"
+    networks:
+      - giropops
+
+networks:
+  giropops:
+    driver: bridge

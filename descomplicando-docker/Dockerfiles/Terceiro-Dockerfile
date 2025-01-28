@@ -1,0 +1,13 @@
+FROM ubuntu:18.04
+LABEL maintainer="rodrigo.corazza@gmail.com"
+RUN apt-get update && apt-get install nginx -y && rm -rf /var/lib/apt/lists/*
+EXPOSE 80
+COPY index.html /var/www/html/
+WORKDIR /var/www/html
+ENV APP_VERSION 1.0.0
+ENTRYPOINT ["nginx"]
+CMD ["-g", "daemon off;"]
+
+#LABEL - rótulo, metadata, organização da imagem, versão de app
+#ENTRYPOINT - quando usado no Dockerfile, o Docker ja entende que é o principal processo, se morrer nada mais importa, inclusive o container morre também
+#ENTRYPOINT/CMD- quando tiver ENTRYPOINT e CMD no mesmo Docker o CMD sempre vai ser parâmetros do ENTRYPOINT (Boa práticas)

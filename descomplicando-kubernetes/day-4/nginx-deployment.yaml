@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx-deployment
+  name: nginx-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-deployment
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: nginx-deployment
+    spec:
+      containers:
+      - image: nginx:1.19.1
+        name: nginx
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: 256Mi
+          requests:
+            cpu: "0.25"
+            memory: 128Mi
+        livenessProbe:                      #de tempos em tempos vai validar a porta 80 no protocolo tcp
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 10           #tempo de espera até subir o pod e validar a primeira vez, em segundos
+          periodSeconds: 10                  #tempos em tempos a ser validado
+          timeoutSeconds: 5                  #vai esperar 5 segundos até validar a porta, senao vai dar timeout
+          failureThreshold: 3               #Quantas vezes ele precisa falhar para restartar o pod
+          successThreshold: 1
+        readinessProbe:
+          exec:
+            command: 
+            - curl
+            - -f 
+            - http://localhost:80/
+          initialDelaySeconds: 10           #tempo de espera até subir o pod e validar a primeira vez, em segundos
+          periodSeconds: 10                  #tempos em tempos a ser validado
+          timeoutSeconds: 5                  #vai esperar 5 segundos até validar a porta, senao vai dar timeout
+          failureThreshold: 3               #Quantas vezes ele precisa falhar para restartar o pod
+          successThreshold: 1
+        startupProbe:
+          tcpSocket:
+            port: 80
+          initialDelaySeconds: 10           #tempo de espera até subir o pod e validar a primeira vez, em segundos
+          timeoutSeconds: 5                  #vai esperar 5 segundos até validar a porta, senao vai dar timeout
+          failureThreshold: 3               #Quantas vezes ele precisa falhar para restartar o pod
+

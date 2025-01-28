@@ -1,0 +1,81 @@
+version: "3.8"
+services:
+  giropops-senhas:
+    build: 
+      context: ./                         #contexto que está o arquivo Dockerfile, no caso a pasta      
+      dockerfile: Dockerfile              #nome do arquivo Dockerfile
+  #  container_name: giropops-senhas-container
+    ports:
+      - "80:5000"
+    networks:
+      - giropops
+    environment:
+      REDIS_HOST: redis
+    env_file:
+      - .env
+    volumes:
+      - type: volume
+        source: strigus
+        target: /strigus
+      #- strigus:/strigus
+    depends_on:                           #depends_on: depende do redis ficar pronto para subir o giropops subir também
+      - redis                             
+    deploy:                               #deploy: no momento de deploy
+      replicas: 1                         #adicionando 2 replicas 
+      labels:
+        io.linuxtips.description: "Giropops Senhas App"
+        io.linuxtips.version: "1.0"
+      update_config:                      #update_config: quanto tiver atualização...
+        parallelism: 1                    #parallelism: os container serao atualizado de 2 em 2
+        delay: 10s                        #delay: tempo de 1 e outra atualização.         
+      resources:                          #resources: siga alguns parametros
+        reservations:                     #reservations: está reservado pro container
+          cpus: '0.25'                    
+          memory: '128M'                  
+        limits:                           #limits: limite maximo que o container pode usar
+          cpus: '0.5'                     
+          memory: '256M'
+      restart_policy:                     #Quando ele irá fazer um restart, qual a condição
+        condition: on-failure             #condition: tipo de condião para o reboot
+        delay: 5s                         # tempo pro restart
+        max_attempts: 3                   # quantidade de vezes que ele vai rebootar, pra nao ficar emm loop em caso de falha
+    dns:
+      - 8.8.8.8
+      - 8.8.4.4
+
+  redis:
+    image: redis
+    container_name: redis-container
+    networks:
+      - giropops
+    volumes:
+      - strigus:/strigus
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]  #comando pelo CMD validando ping/pong pelo serviço redis-cli
+      interval: 30s                       #de quanto em quanto tempo vai verificar
+      timeout: 5s                         #demorou quanto tempo posso considerar um problema
+      retries: 3                          #quantas tentativa vai tentar até dar ruim 
+      start_period: 10s                   #Quando vai começar fazer tudo isso, subiu contaienr quando vai começar fazer
+    labels:
+      io.linuxtips.description: "Redis Server"
+      io.linuxtips.version: "Latest"
+
+networks:
+  giropops:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "192.20.0.0/16"
+    labels:
+      io.linuxtips.network: "giropops-network"
+
+volumes:
+  strigus: 
+    driver: local
+    driver_opts:
+      type: "none"
+      device: ./
+      o: "bind"                           #option do tipo bind
+    labels:
+      io.linuxtips.volume: "strigus_volume"

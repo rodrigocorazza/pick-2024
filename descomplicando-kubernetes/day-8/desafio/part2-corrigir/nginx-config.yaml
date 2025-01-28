@@ -1,0 +1,14 @@
+apiVersion: v1
+data:
+  nginx.conf: "events {}\n\n    http {\n    server {\n        listen 80;\n        listen
+    443 ssl;\n\n        ssl_certificate /etc/nginx/tls/nginx.crt;\n        ssl_certificate_key
+    /etc/nginx/tls/nginx.key;\n        \n        location / {\n          return 200
+    'Desafio Day-8 LinuxTips!\\n';\n          add_header Content-Type text/plain;\n
+    \       }\n      }\n    }"
+kind: ConfigMap
+metadata:
+  creationTimestamp: "2024-07-17T01:59:42Z"
+  name: nginx-config
+  namespace: default
+  resourceVersion: "721"
+  uid: f902113e-a5fc-422e-8bce-9610b29728aa

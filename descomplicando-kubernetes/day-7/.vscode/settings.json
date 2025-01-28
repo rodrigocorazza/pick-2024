@@ -1,0 +1,5 @@
+{
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/ansible/ansible-lint/main/src/ansiblelint/schemas/meta.json": "file:///home/rodrigo/Desktop/GoogleDrive/devops-study/linuxtips/pick-2024/descomplicando-kubernetes/day-7/cluster.yaml"
+    }
+}

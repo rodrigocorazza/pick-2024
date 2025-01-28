@@ -1,0 +1,7 @@
+kind: Cluster                         #versão cluster
+apiVersion: kind.x-k8s.io/v1alpha4    #versão a ser utilizada para criar um cluster            
+nodes:
+- role: control-plane                 #role a ser definida, control-plane ou worker, será criado 1 control-plane e 2 worker
+- role: worker
+- role: worker
+

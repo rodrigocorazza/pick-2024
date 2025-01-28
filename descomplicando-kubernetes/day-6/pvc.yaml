@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolumeClaim 
+metadata:
+  labels:
+    pvc: meu-primeiro-pvc
+  name: meu-pvc 
+spec:
+  accessModes:            #vai entregar o melhor pv possível que foi solicitado
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: giropops
+  selector:
+    matchLabels:                #vai fazer um match com o outro pv criado anteriormente
+      storage: nfs              #lab para fazer o match

@@ -1,0 +1,44 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: giropops-senhas-hpa
+spec:
+  scaleTargetRef: # de quem ele vai cuidar para fazer o scale up e o scale down
+    apiVersion: apps/v1
+    kind: Deployment
+    name: giropops-senhas
+  minReplicas: 3
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 80
+    - type: ContainerResource #Afunilar o container específico que está consumindo mais recurso (memória ou cpu)
+      containerResource:
+        container: giropops-senhas
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
+  behavior:    #Como vai ser o comportamento do HPA quando ele for fazer o scale up e o scale down
+    scaleUp:
+      stabilizationWindowSeconds: 5 #5 segundos esperando para ver se a média de utilização vai continuar alta
+      policies:   #Quando isso deve ser considerado em consideração para fazer o scale up
+        - type: Percent #Percentual de aumento
+          value: 100 #100% tem que ser respeitada para fazer o scale up
+          periodSeconds: 10 # de quanto em quanto tempo ele vai verificar se a média de utilização está alta
+    scaleDown:
+      stabilizationWindowSeconds: 60 #60 segundos esperando para ver se a média de utilização vai continuar baixa
+      policies:   #Quando isso deve ser considerado em consideração para fazer o scale down
+        - type: Percent #Percentual de aumento
+          value: 100 #100% tem que ser respeitada para fazer o scale down
+          periodSeconds: 10 # de quanto em quanto tempo ele vai verificar se a média de utilização está baixa      

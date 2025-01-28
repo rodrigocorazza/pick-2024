@@ -1,0 +1,15 @@
+FROM ubuntu:18.04
+LABEL maintainer="rodrigo.corazza@gmail.com"
+RUN apt-get update && apt-get install nginx curl -y && rm -rf /var/lib/apt/lists/*
+EXPOSE 80
+ADD node_exporter-1.7.0.linux-amd64.tar.gz /root/node_exporter
+COPY index.html /var/www/html/
+WORKDIR /var/www/html
+ENV APP_VERSION 1.0.0
+ENTRYPOINT ["nginx"]
+CMD ["-g", "daemon off;"]
+HEALTHCHECK --timeout=2s CMD curl -f localhost || exit 1
+
+#ADD consegue pegar coisas da internet e jogar pro container, jogar o conteudo do tar.gz na pasta que quiser
+#HEALTHCHECK - só vai validar se o container vai estar saudável
+#HEALTHCHECK - vai executar (CMD) o curl no localhost durante timeout de 2 segundo ele vai dar exit 1

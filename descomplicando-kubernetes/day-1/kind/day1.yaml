@@ -1,0 +1,17 @@
+apiVersion: v1                    #versão da apiserver
+kind: Pod                         #criar um pod
+metadata:                         #vai estabelecer as informações do metadata como:
+  creationTimestamp: null         #-data da sua criação
+  labels:                         #-rotulos
+    run: giropops
+  name: giropops-2                  #Nome do pod
+spec:                             #Especificações do que ele quer pro pod, no caso container
+  containers:
+  - image: nginx
+    name: giropops
+    ports:
+    - containerPort: 80
+    resources: {}                 #Se existir limitação de recurso é aqui que tem que ser configurado
+  dnsPolicy: ClusterFirst         #COmo funciona a resolução de dns, primeiro dentro do cluster
+  restartPolicy: Always           #Quando será restartado, se tiver problema e etc...
+status: {}

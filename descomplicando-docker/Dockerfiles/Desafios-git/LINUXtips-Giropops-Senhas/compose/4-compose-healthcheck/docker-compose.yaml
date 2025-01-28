@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  giropops-senhas:
+    build: ./
+    ports:
+      - "80:5000"
+    networks:
+      - giropops
+    environment:
+      REDIS_HOST: redis
+    volumes:
+      - strigus:/strigus
+    depends_on:                 #depends_on: depende do redis ficar pronto para subir o giropops subir também
+      - redis
+    deploy:                     #deploy: no momento de deploy
+      resources:                #resources: siga alguns parametros
+        reservations:           #reservations: está reservado pro container
+          cpus: '0.25'
+          memory: '128M'
+        limits:                 #limits: limite maximo que o container pode usar
+          cpus: '0.5'
+          memory: '256M'
+
+  redis:
+    image: redis
+    networks:
+      - giropops
+    volumes:
+      - strigus:/strigus
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]  #comando pelo CMD validando ping/pong pelo serviço redis-cli
+      interval: 30s                       #de quanto em quanto tempo vai verificar
+      timeout: 5s                         #demorou quanto tempo posso considerar um problema
+      retries: 3                          #quantas tentativa vai tentar até dar ruim 
+      start_period: 10s                   #Quando vai começar fazer tudo isso, subiu contaienr quando vai começar fazer
+
+networks:
+  giropops:
+    driver: bridge
+
+volumes:
+  strigus: 

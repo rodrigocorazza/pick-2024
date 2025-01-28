@@ -1,0 +1,7 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: giropops
+provisioner: kurbernetes.io/no-provisioner  #Para nao usar nenhum e criar um de teste, tem que usar esse pela recomendação
+reclaimPolicy: Retain                       #Vai Reter os dados
+volumeBindingMode: WaitForFirstConsumer     #Vai esperar pelo primeiro a consumir o disco

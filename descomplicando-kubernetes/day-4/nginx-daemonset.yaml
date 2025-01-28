@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: node-exporter-daemonset
+  name: node-exporter-daemonset
+spec:
+  selector:
+    matchLabels:
+      app: node-exporter-daemonset
+  template:
+    metadata:
+      labels:
+        app: node-exporter-daemonset
+    spec:
+      hostNetwork: true                              #habilita o uso da rede do node,
+      containers:
+      - name: node-exporter
+        image: prom/node-exporter:latest
+        ports: 
+        - containerPort: 9100                        #porta que vai rodar o node-exporter
+          hostPort: 9100                             #porta a ser exposta no host
+        volumeMounts:                                #Node-exporter precisa ter acesso ao filesystem do node em alguns diretorio especifico (proc e sys) para metricas
+        - name: proc                                 #diretório a ser trazido para montagem abaixo
+          mountPath: /host/proc                      #Lugar a ser montado dentro do container
+          readOnly: true                             #Somente leitura
+        - name: sys                                  #diretório a ser trazido para montagem abaixo
+          mountPath: /host/sys                       #Lugar a ser montado dentro do container
+          readOnly: true                             #Somente leitura
+      volumes: 
+      - name: proc
+        hostPath:                                    #pegar um diretório do seu host/nó e virar um volume
+          path: /proc
+      - name: sys
+        hostPath:
+          path: /sys
+    

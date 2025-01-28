@@ -1,0 +1,14 @@
+FROM ubuntu:18.04
+RUN apt-get update && apt-get install nginx -y && rm -rf /var/lib/apt/lists/*
+EXPOSE 80
+COPY index.html /var/www/html/
+CMD ["nginx", "-g", "daemon off;"]
+#Quando iniciar o container é aonde ele vai estar trabalhando, quando entrar no container ja vai estar na pasta /var/www/html
+WORKDIR /var/www/html
+#ENV - Variavel de ambiente
+ENV APP_VERSION 1.0.0
+
+
+#antigamente o comando update, baixava um monte de bugiganga no diretório /var/lib/apt/lists, por isso o rm -rf dentro da pasta lists
+#muito provavel que hoje nao precise mais usar, apenas para conhecimento
+
