@@ -1,0 +1,15 @@
+apiVersion: v1 
+kind: Pod
+metadata: 
+  namespace: giropops
+  labels:
+    app: nginx
+  name: nginx
+spec:
+  containers:
+  - name: nginx
+    image: cgr.dev/chainguard/nginx:latest
+    resources:
+      limits:
+        memory: 128Mi
+        cpu: "2.0"

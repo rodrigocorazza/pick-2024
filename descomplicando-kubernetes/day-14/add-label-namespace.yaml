@@ -1,5 +1,5 @@
 apiVersion: kyverno.io/v1
-kind: ClusterPolicy
+kind: ClusterPolicy #ClusterPolicy se aplica a todos os namespaces /Policy que se aplica a um namespace
 metadata:
   name: add-label-namespace
 spec:
@@ -13,4 +13,4 @@ spec:
       patchStrategicMerge: #estratégica de merge de modificações, vai adicionar o label no namespace
         metadata: 
           labels: 
-            Rodrigo: "Lindao_Demais"
+            rodrigo: "rodrigo_corazza"

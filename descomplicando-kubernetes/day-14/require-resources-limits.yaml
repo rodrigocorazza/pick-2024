@@ -1,9 +1,9 @@
 apiVersion: kyverno.io/v1
-kind: ClusterPolicy
+kind: ClusterPolicy 
 metadata:
   name: require-resources-limits
 spec:
-  validationFailureAction: Enforce
+  validationFailureAction: Enforce #ação a ser tomada é aplicar a restrição e bloquear a operação
   rules:
   - name: validate-limits
     match:     #faça match com os recursos abaixos
