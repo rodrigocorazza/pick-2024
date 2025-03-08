@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: nginx
+  name: nginx-gpu
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - image: nginx
+        name: nginx-gpu
+        ports:
+        - containerPort: 80
+      tolerations:
+      - key: "gpu" # Como colocamos gpu=true, a chave é gpu
+        operator: "Equal" #Testa se o valor da chave é igual ao valor do campo value
+        value: "true" # Se o valor da chave for igual a true, o pod será tolerante a GPU
+        effect: "NoSchedule" # O efeito NoSchedule indica que o pod não será agendado em um nó que não tenha a taint gpu=true
